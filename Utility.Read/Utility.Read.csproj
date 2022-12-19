@@ -13,9 +13,7 @@
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Update="appsettings.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+	  <ProjectReference Include="..\DBSpotifyAPI\DBSpotifyAPI.csproj" />
 	</ItemGroup>
 
 </Project>

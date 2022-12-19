@@ -1,5 +1,6 @@
 ﻿using DBSpotifyAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,109 +19,157 @@ namespace DBSpotifyAPI.Utils
             Clear(ctx.Radios);
             Clear(ctx.Genres);
 
-            Account account = new() { Id = 1, UserName = "admin", Playlists = new() };
+            Account account = new() {UserName = "admin", Playlists = new(), Email="d", Pw="g", SubscriptionName="r" };
 
             List<Artist> artists = new List<Artist>() 
             { 
-                new Artist() {Title = "Cannibal Corpe", Albums = new(), Songs = new(), Id = 1 },
-                new Artist() {Title = "Aerosmith", Albums = new(), Songs = new(), Id = 2 },
-                new Artist() {Title = "Nickelback", Albums = new(), Songs = new(), Id = 3 },
-                new Artist() {Title = "Pino Daniele", Albums = new(), Songs = new(), Id = 4 },
-                new Artist() {Title = "Metallica", Albums = new(), Songs = new(), Id = 5 },
-                new Artist() {Title = "AC DC", Albums = new(), Songs = new(), Id = 6 }
+                new Artist() {Title = "Cannibal Corpe", Albums = new(), Songs = new()},
+                new Artist() {Title = "Aerosmith", Albums = new(), Songs = new()},
+                new Artist() {Title = "Nickelback", Albums = new(), Songs = new() },
+                new Artist() {Title = "Pino Daniele", Albums = new(), Songs = new() },
+                new Artist() {Title = "Metallica", Albums = new(), Songs = new() },
+                new Artist() {Title = "AC DC", Albums = new(), Songs = new() }
             };
 
             List<Album> albums = new List<Album>()
             {
-                new Album() {Title = "Kill", Songs = new(), ArtistId = 1, GenreId = 1, Id =1  },
-                new Album() {Title = "Best Of", Songs = new(), ArtistId = 2, GenreId = 1, Id =2 },
-                new Album() {Title = "Get Rollin",Songs = new(), ArtistId = 3, GenreId = 2, Id =3 },
-                new Album() {Title = "Medina", Songs = new(), ArtistId = 4, GenreId = 3, Id =4 },
-                new Album() {Title = "Metallica", Songs = new() , ArtistId = 5, GenreId = 2, Id =5},
-                new Album() {Title = "Back in Black", Songs = new(), ArtistId = 6, GenreId = 1, Id =6 }
+                new Album() {Title = "Kill", Songs = new()},
+                new Album() {Title = "Best Of", Songs = new()},
+                new Album() {Title = "Get Rollin",Songs = new()},
+                new Album() {Title = "Medina", Songs = new() },
+                new Album() {Title = "Metallica", Songs = new()},
+                new Album() {Title = "Back in Black", Songs = new()}
             };
 
             List<Song> songs = new List<Song>()
             {
-                new Song() {Title = "The Time to Kill is Now", Id= 1, AlbumId = 1, ArtistId = 1, GenreId = 1, Popularity = 10},
-                new Song() {Title = "Murder Worship", Id= 2, AlbumId = 1, ArtistId = 1, GenreId = 1, Popularity = 20},
-                new Song() {Title = "Death Waking Terror", Id= 3, AlbumId = 1, ArtistId = 1, GenreId = 1, Popularity = 30},
-                new Song() {Title = "Make Them Suffer", Id= 4, AlbumId = 1, ArtistId = 1, GenreId = 1, Popularity = 40},
-                new Song() {Title = "Purification by fire", Id= 5, AlbumId = 1, ArtistId = 1, GenreId = 1, Popularity = 10},
-                new Song() {Title = "Barbaric", Id= 6, AlbumId = 1, ArtistId = 1, GenreId = 1, Popularity = 20},
+                new Song() {Title = "The Time to Kill is Now",Popularity = 10},
+                new Song() {Title = "Murder Worship", Popularity = 20},
+                new Song() {Title = "Death Waking Terror", Popularity = 30},
+                new Song() {Title = "Make Them Suffer", Popularity = 40},
+                new Song() {Title = "Purification by fire", Popularity = 10},
+                new Song() {Title = "Barbaric", Popularity = 20},
 
-                new Song() {Title = "Angel", Id= 7, AlbumId = 2, ArtistId = 2, GenreId = 1, Popularity = 10},
-                new Song() {Title = "Crazy", Id= 8, AlbumId = 2, ArtistId = 2, GenreId = 1, Popularity = 20},
-                new Song() {Title = "Cryin", Id= 9, AlbumId = 2, ArtistId = 2, GenreId = 1, Popularity = 30},
-                new Song() {Title = "Dream On", Id= 10, AlbumId = 2, ArtistId = 2, GenreId = 1, Popularity = 10},
-                new Song() {Title = "Walk this Way", Id= 11, AlbumId = 2, ArtistId = 2, GenreId = 1, Popularity = 40},
-                new Song() {Title = "Rag Doll", Id= 12, AlbumId = 2, ArtistId = 2, GenreId = 1, Popularity = 10},
+                new Song() {Title = "Angel", Popularity = 10},
+                new Song() {Title = "Crazy", Popularity = 20},
+                new Song() {Title = "Cryin", Popularity = 30},
+                new Song() {Title = "Dream On", Popularity = 10},
+                new Song() {Title = "Walk this Way", Popularity = 40},
+                new Song() {Title = "Rag Doll", Popularity = 10},
 
-                new Song() {Title = "San Quentin", Id= 13, AlbumId = 3, ArtistId = 3, GenreId = 2, Popularity = 10},
-                new Song() {Title = "Skinny Little Missy", Id= 14, AlbumId = 3, ArtistId = 3, GenreId = 2, Popularity = 30},
-                new Song() {Title = "Those Days", Id= 15, AlbumId = 3, ArtistId = 3, GenreId = 2, Popularity = 20},
-                new Song() {Title = "High Time", Id= 16, AlbumId = 3, ArtistId = 3, GenreId = 2, Popularity = 40},
-                new Song() {Title = "Vegans Bomb", Id= 17, AlbumId = 3, ArtistId = 3, GenreId = 2, Popularity = 10},
-                new Song() {Title = "Tidal Wave", Id= 18, AlbumId = 3, ArtistId = 3, GenreId = 2, Popularity = 10},
+                new Song() {Title = "San Quentin", Popularity = 10},
+                new Song() {Title = "Skinny Little Missy", Popularity = 30},
+                new Song() {Title = "Those Days", Popularity = 20},
+                new Song() {Title = "High Time", Popularity = 40},
+                new Song() {Title = "Vegans Bomb", Popularity = 10},
+                new Song() {Title = "Tidal Wave", Popularity = 10},
 
-                new Song() {Title = "Via Medina", Id= 19, AlbumId = 4, ArtistId = 4, GenreId = 3, Popularity = 10},
-                new Song() {Title = "Evviva o rre", Id= 20, AlbumId = 4, ArtistId = 4, GenreId = 3, Popularity = 10},
-                new Song() {Title = "Tempo di cambiare", Id= 21, AlbumId = 4, ArtistId = 4, GenreId = 3, Popularity = 30},
-                new Song() {Title = "Sara", Id= 22, AlbumId = 4, ArtistId = 4, GenreId = 3, Popularity = 40},
-                new Song() {Title = "Senza di te", Id= 23, AlbumId = 4, ArtistId = 4, GenreId = 3, Popularity = 20},
-                new Song() {Title = "Mareluna", Id= 24, AlbumId = 4, ArtistId = 4, GenreId = 3, Popularity = 20},
+                new Song() {Title = "Via Medina", Popularity = 10},
+                new Song() {Title = "Evviva o rre", Popularity = 10},
+                new Song() {Title = "Tempo di cambiare", Popularity = 30},
+                new Song() {Title = "Sara", Popularity = 40},
+                new Song() {Title = "Senza di te", Popularity = 20},
+                new Song() {Title = "Mareluna", Popularity = 20},
 
-                new Song() {Title = "Enter Sandman", Id= 25, AlbumId = 5, ArtistId = 5, GenreId = 2, Popularity = 20},
-                new Song() {Title = "Sad but true", Id= 26, AlbumId = 5, ArtistId = 5, GenreId = 2, Popularity = 10},
-                new Song() {Title = "Holler then thou", Id= 27, AlbumId = 5, ArtistId = 5, GenreId = 2, Popularity = 30},
-                new Song() {Title = "Nothing else matter", Id= 28, AlbumId = 5, ArtistId = 5, GenreId = 2, Popularity = 40},
-                new Song() {Title = "Wherever i may roam", Id= 29, AlbumId = 5, ArtistId = 5, GenreId = 2, Popularity = 10},
-                new Song() {Title = "The Unforgiven", Id= 30, AlbumId = 5, ArtistId = 5, GenreId = 2, Popularity = 20},
+                new Song() {Title = "Enter Sandman", Popularity = 20},
+                new Song() {Title = "Sad but true", Popularity = 10},
+                new Song() {Title = "Holler then thou", Popularity = 30},
+                new Song() {Title = "Nothing else matter", Popularity = 40},
+                new Song() {Title = "Wherever i may roam", Popularity = 10},
+                new Song() {Title = "The Unforgiven", Popularity = 20},
 
-                new Song() {Title = "Hells Bells", Id= 31, AlbumId = 6, ArtistId = 6, GenreId = 1, Popularity = 20},
-                new Song() {Title = "Shoot to thrill", Id= 32, AlbumId = 6, ArtistId = 6, GenreId = 1, Popularity = 10},
-                new Song() {Title = "Bck in Black", Id= 36, AlbumId = 6, ArtistId = 6, GenreId = 1, Popularity = 40},
-                new Song() {Title = "Shake a leg", Id= 38, AlbumId = 6, ArtistId = 6, GenreId = 1, Popularity = 50},
-                new Song() {Title = "Have a drink on me", Id= 39, AlbumId = 6, ArtistId = 6, GenreId = 1, Popularity = 10},
-                new Song() {Title = "Let me put my love into you", Id= 40, AlbumId = 6, ArtistId = 6, GenreId = 1, Popularity = 20},
+                new Song() {Title = "Hells Bells", Popularity = 20},
+                new Song() {Title = "Shoot to thrill", Popularity = 10},
+                new Song() {Title = "Bck in Black", Popularity = 40},
+                new Song() {Title = "Shake a leg", Popularity = 50},
+                new Song() {Title = "Have a drink on me", Popularity = 10},
+                new Song() {Title = "Let me put my love into you", Popularity = 20},
             };
 
             List<Playlist> playlists = new List<Playlist>()
             {
-                new Playlist() {Id = 1, Title="Bellissimo", AccountId= 1},
-                new Playlist() {Id = 2, Title="Top", AccountId= 1}
+                new Playlist() { Title="Bellissimo"},
+                new Playlist() { Title="Top"}
             };
 
             List<Genre> genres = new List<Genre>()
             { 
-                new Genre() {Id = 1,Title = "HardRock", Albums = new(), Radios = new(), Songs= new()},
-                new Genre() {Id = 2, Title = "Rock", Albums = new(), Radios = new(), Songs= new()},
-                new Genre() {Id = 3, Title = "Pop", Albums = new(), Radios = new(), Songs= new()},
-                new Genre() {Id = 4,Title = "Metal", Albums = new(), Radios = new(), Songs= new()}
+                new Genre() {Title = "HardRock", Albums = new(), Radios = new(), Songs= new()},
+                new Genre() { Title = "Rock", Albums = new(), Radios = new(), Songs= new()},
+                new Genre() {Title = "Pop", Albums = new(), Radios = new(), Songs= new()},
+                new Genre() {Title = "Metal", Albums = new(), Radios = new(), Songs= new()}
             };
 
             List<Radio> radios = new List<Radio>()
             {
-                new Radio() {Id = 1,Title="HardRock2022", GenreId = 1},
-                new Radio() {Id = 2,Title="Rock2022", GenreId = 2},
-                new Radio() {Id = 3,Title="Pop2022", GenreId = 3},
-                new Radio() {Id = 4,Title="Metal2022", GenreId = 4}
+                new Radio() {Title="HardRock2022"},
+                new Radio() {Title="Rock2022"},
+                new Radio() {Title="Pop2022"},
+                new Radio() {Title="Metal2022" }
             };
 
-            List<PlaylistSong> songList = new List<PlaylistSong>()
+            /*List<PlaylistSong> songList = new List<PlaylistSong>()
             { 
                 new PlaylistSong() {Id = 1, SongId=1, PlaylistId=1},
                 new PlaylistSong() {Id = 2, SongId=2, PlaylistId=1},
                 new PlaylistSong() {Id = 3, SongId=5, PlaylistId=2},
                 new PlaylistSong() {Id = 4, SongId=10, PlaylistId=2}
-            };
+            };*/
+
+            for (int i = 0; i<artists.Count; i++)
+            {
+                artists[i].Albums.Add(albums[i]);
+            }
+            for (int i = 0; i < artists.Count; i++)
+            {
+                artists[i].Songs.AddRange(GetPage<Song>(songs, i, 6));
+            }
+            for (int i = 0; i < albums.Count; i++)
+            {
+                albums[i].Songs.AddRange(GetPage<Song>(songs,i,6));
+            }
+
+            var temp = new List<Song>();
+            for (int i = 0; i < genres.Count; i++)
+            {
+                temp = new List<Song>() { songs[i*6], songs[i*6 + 1], songs[i*6 + 2], songs[i*6 + 3], songs[i*6 + 4], songs[i*6 + 5] };
+                genres[i].Songs.AddRange(temp);
+            }
+            temp = new List<Song>() { songs[24], songs[25], songs[26], songs[27], songs[28], songs[29] };
+            genres[0].Songs.AddRange(temp);
+            temp = new List<Song>() { songs[30], songs[31], songs[32], songs[33], songs[34], songs[35] };
+            genres[1].Songs.AddRange(temp);
+
+
+
+            account.Playlists = playlists;
+
+            ctx.Artists.AddRange(artists);
+            ctx.Albums.AddRange(albums);
+            ctx.Songs.AddRange(songs);
+            ctx.Radios.AddRange(radios);
+            ctx.Playlists.AddRange(playlists);
+            ctx.Genres.AddRange(genres);
+            ctx.Accounts.Add(account);
+            try
+            {
+                await ctx.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                throw;
+                System.Console.WriteLine(ex.Message);
+            }
         }
 
         public static void Clear<T>(this DbSet<T> dbSet) where T : class
         {
             if (dbSet.Any())
                 dbSet.RemoveRange(dbSet.ToList());
-
+        }
+        public static IList<T> GetPage<T>(IList<T> list, int page, int pageSize)
+        {
+            return list.Skip(page * pageSize).Take(pageSize).ToList();
         }
     }
 }

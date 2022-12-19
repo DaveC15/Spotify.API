@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using DBSpotifyAPI.Models;
 
 namespace Utility.Read
 {
@@ -13,7 +14,7 @@ namespace Utility.Read
         public static void SourceSelectionInterface()
         {
             string input;
-            User user = new User();
+            
             do
             {
                 Console.Clear();
@@ -26,16 +27,12 @@ namespace Utility.Read
             if (Authentication.dataSource.StartsWith("local"))
             {
                 Console.WriteLine("Musica caricata da locale");
-                var config = Config.getInstance();
                 var data = DataStore.GetInstance();
-                data.user.Online = false;
             }
             else
             {
                 Console.WriteLine("Musica caricata dalla rete");
-                var config = Config.getInstance();
                 var data = DataStore.GetInstance();
-                data.user.Online = true;
             }
 
         }
@@ -136,7 +133,7 @@ namespace Utility.Read
                         if (MediaPlayer.GetInstance().currentPages.Contains("p"))
                         {
                             media.currentPages.Add("playlistMenu");
-                            input = PlaylistPage();
+                            input = LocaleHomePage();
                         }
                         else { input = LocaleHomePage(); }
                         break;
@@ -239,7 +236,7 @@ namespace Utility.Read
         public static void LocaleNavbar()
         {
             Console.Clear();
-            string local = DataStore.GetInstance().user.Online ? "" : "local";
+            string local = Authentication.dataSource== "onlineSettings" ? "" : "local";
             Console.WriteLine($"SPOTIFY {local}\n\n");
             if (MediaPlayer.GetInstance().currentPages.Contains("h"))
             {
@@ -332,7 +329,7 @@ namespace Utility.Read
         public static string SettingsSubNavbar()
         {
             string input = "";
-            if (DataStore.GetInstance().user.Online)
+            if (Authentication.dataSource == "onlineSettings")
             {
                 if (MediaPlayer.GetInstance().currentPages.Contains("e"))
                 {
@@ -377,7 +374,7 @@ namespace Utility.Read
             var artists = Utility.GetTopFiveArtists();
             for (int i = 0; i < artists.Count(); i++)
             {
-                Console.WriteLine($"{i + 1}. {artists[i].Name}");
+                Console.WriteLine($"{i + 1}. {artists[i].Title}");
             }
             SongPlayer();
             input = Console.ReadLine();
@@ -386,7 +383,7 @@ namespace Utility.Read
                 if (int.Parse(input) >= 1 && int.Parse(input) <= artists.Count())
                 {
 
-                    MediaPlayer.GetInstance().currentArtist = Utility.FindArtist(artists[int.Parse(input) - 1].Name);
+                    MediaPlayer.GetInstance().currentArtist = Utility.FindArtist(artists[int.Parse(input) - 1].Title);
 
                     return "artistMenu";
                 }
@@ -434,7 +431,7 @@ namespace Utility.Read
                     else if (int.Parse(input) >= 1 && int.Parse(input) <= songsToPrint.Count)
                     {
                         MediaPlayer.GetInstance().Play(Utility.FindSong(songsToPrint[int.Parse(input) - 1].Title));
-                        MediaPlayer.GetInstance().currentSong.SetStatus(Status.ALL);
+                        MediaPlayer.GetInstance().SetStatus(Status.ALL);
                         if (flag == 0) { return "s"; }
                         else { return "f"; }
 
@@ -464,7 +461,7 @@ namespace Utility.Read
                 var artistsToPrint = GetPage(artists, pageNumber, pagination);
                 for (int j = 0; j < artistsToPrint.Count; j++)
                 {
-                    Console.WriteLine($"{j + 1}. {artistsToPrint[j].Name}");
+                    Console.WriteLine($"{j + 1}. {artistsToPrint[j].Title}");
                 }
                 Console.WriteLine("\n0. Next page");
                 Console.WriteLine("H. Torna alla homepage");
@@ -487,7 +484,7 @@ namespace Utility.Read
                     else if (int.Parse(input) >= 1 && int.Parse(input) <= artistsToPrint.Count)
                     {
 
-                        MediaPlayer.GetInstance().currentArtist = Utility.FindArtist(artistsToPrint[int.Parse(input) - 1].Name);
+                        MediaPlayer.GetInstance().currentArtist = Utility.FindArtist(artistsToPrint[int.Parse(input) - 1].Title);
                         MediaPlayer.GetInstance().currentPages.Clear();
                         MediaPlayer.GetInstance().currentPages.Add("m");
                         MediaPlayer.GetInstance().currentPages.Add("a");
@@ -556,7 +553,7 @@ namespace Utility.Read
         }
         public static string LocaleAllRadios()
         {
-            var radios = DataStore.GetInstance().radios.OrderBy(x => x.Genre).ToList();
+            var radios = DataStore.GetInstance().radios.OrderBy(x => x.Genre.Title).ToList();
             int pageNumber = 0;
             int pagination = 9;
             string input;
@@ -567,7 +564,7 @@ namespace Utility.Read
                 var songsToPrint = GetPage(radios, pageNumber, pagination);
                 for (int j = 0; j < songsToPrint.Count; j++)
                 {
-                    Console.WriteLine($"{j + 1}. {songsToPrint[j].Name}");
+                    Console.WriteLine($"{j + 1}. {songsToPrint[j].Title}");
                 }
                 Console.WriteLine("\n0. Next page");
                 Console.WriteLine("H. Torna alla homepage");
@@ -589,7 +586,7 @@ namespace Utility.Read
                     }
                     else if (int.Parse(input) >= 1 && int.Parse(input) <= songsToPrint.Count)
                     {
-                        MediaPlayer.GetInstance().currentRadio = Utility.FindRadio(songsToPrint[int.Parse(input) - 1].Name);
+                        MediaPlayer.GetInstance().currentRadio = Utility.FindRadio(songsToPrint[int.Parse(input) - 1].Title);
                         MediaPlayer.GetInstance().PlayRadio();
                         return "r";
                     }
@@ -614,7 +611,7 @@ namespace Utility.Read
                 var songsToPrint = GetPage(radios, pageNumber, pagination);
                 for (int j = 0; j < songsToPrint.Count; j++)
                 {
-                    Console.WriteLine($"{j + 1}. {songsToPrint[j].Name}");
+                    Console.WriteLine($"{j + 1}. {songsToPrint[j].Title}");
                 }
                 Console.WriteLine("\n0. Next page");
                 Console.WriteLine("H. Torna alla homepage");
@@ -637,7 +634,7 @@ namespace Utility.Read
                     else if (int.Parse(input) >= 1 && int.Parse(input) <= songsToPrint.Count)
                     {
 
-                        MediaPlayer.GetInstance().currentPlaylist = Utility.FindPlaylist(songsToPrint[int.Parse(input) - 1].Name);
+                        MediaPlayer.GetInstance().currentPlaylist = Utility.FindPlaylist(songsToPrint[int.Parse(input) - 1].Title);
                         return "playlistMenu";
                     }
                 }
@@ -655,7 +652,7 @@ namespace Utility.Read
             {
                 Artist artist = MediaPlayer.GetInstance().currentArtist;
                 LocaleNavbar();
-                Console.WriteLine($"\n{artist.Name}\n");
+                Console.WriteLine($"\n{artist.Title}\n");
                 var topSongs = Utility.GetTopFiveSongs();
                 int j = 1;
                 Console.WriteLine("Le canzoni più ascoltate");
@@ -672,11 +669,6 @@ namespace Utility.Read
                     j++;
                 }
                 Console.WriteLine("\nPremi i per visualizzare tutta la discografia");
-
-                CreateDivisor();
-
-                Console.WriteLine("\nDescrizione artista:\n");
-                Console.WriteLine(MediaPlayer.GetInstance().currentArtist.Description);
                 SongPlayer();
                 input = Console.ReadLine();
                 try
@@ -684,7 +676,7 @@ namespace Utility.Read
                     if (int.Parse(input) >= 1 && int.Parse(input) <= topSongs.Count)
                     {
                         MediaPlayer.GetInstance().Play(Utility.FindSong(topSongs[int.Parse(input) - 1].Title));
-                        MediaPlayer.GetInstance().currentSong.SetStatus(Status.TOP);
+                        MediaPlayer.GetInstance().SetStatus(Status.TOP);
                         return "artistMenu";
                     }
                     else if (int.Parse(input) > topSongs.Count && int.Parse(input) <= 8)
@@ -737,7 +729,7 @@ namespace Utility.Read
                     else if (int.Parse(input) >= 1 && int.Parse(input) <= songsToPrint.Count)
                     {
                         MediaPlayer.GetInstance().Play(Utility.FindSong(songsToPrint[int.Parse(input) - 1].Title));
-                        MediaPlayer.GetInstance().currentSong.SetStatus(Status.ALBUM);
+                        MediaPlayer.GetInstance().SetStatus(Status.ALBUM);
                         return "albumMenu";
                     }
                 }
@@ -751,66 +743,66 @@ namespace Utility.Read
                 }
             } while (true);
         }
-        public static string PlaylistPage()
-        {
-            var playlist = MediaPlayer.GetInstance().currentPlaylist;
-            string input;
-            int pageNumber = 0;
-            int pagination = 9;
-            do
-            {
-                LocaleNavbar();
-                Console.WriteLine($"{playlist.Name}\n");
+        //public static string PlaylistPage()
+        //{
+        //    var playlist = MediaPlayer.GetInstance().currentPlaylist;
+        //    string input;
+        //    int pageNumber = 0;
+        //    int pagination = 9;
+        //    do
+        //    {
+        //        LocaleNavbar();
+        //        Console.WriteLine($"{playlist.Title}\n");
 
-                var songsToPrint = GetPage(playlist.getSongs(), pageNumber, pagination);
-                for (int j = 0; j < songsToPrint.Count; j++)
-                {
-                    Console.WriteLine($"{j + 1}. {songsToPrint[j].Title}");
-                }
-                Console.WriteLine("0. Next page");
-                Console.WriteLine("H. Torna alla homepage");
-                Console.WriteLine("+. Aggiungi brano a playlist");
-                SongPlayer();
-                input = Console.ReadLine().ToLower();
-                try
-                {
-                    if (input == "0")
-                    {
-                        if (pageNumber >= playlist.getSongs().Count / pagination)
-                        {
-                            pageNumber = 0;
-                        }
-                        else { pageNumber++; }
-                    }
-                    else if (input == "h")
-                    {
-                        return input;
-                    }
-                    else if (input == "+")
-                    {
-                        input = Search("p");
-                    }
-                    else if (int.Parse(input) >= 1 && int.Parse(input) <= songsToPrint.Count)
-                    {
-                        MediaPlayer.GetInstance().Play(Utility.FindSong(songsToPrint[int.Parse(input) - 1].Title));
-                        MediaPlayer.GetInstance().currentSong.SetStatus(Status.PLAYLIST);
-                        return "playlistMenu";
-                    }
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    continue;
-                }
-                catch
-                {
-                    return input;
-                }
-            } while (true);
-
-
+        //        var songsToPrint = GetPage(playlist.getSongs(), pageNumber, pagination);
+        //        for (int j = 0; j < songsToPrint.Count; j++)
+        //        {
+        //            Console.WriteLine($"{j + 1}. {songsToPrint[j].Title}");
+        //        }
+        //        Console.WriteLine("0. Next page");
+        //        Console.WriteLine("H. Torna alla homepage");
+        //        Console.WriteLine("+. Aggiungi brano a playlist");
+        //        SongPlayer();
+        //        input = Console.ReadLine().ToLower();
+        //        try
+        //        {
+        //            if (input == "0")
+        //            {
+        //                if (pageNumber >= playlist.getSongs().Count / pagination)
+        //                {
+        //                    pageNumber = 0;
+        //                }
+        //                else { pageNumber++; }
+        //            }
+        //            else if (input == "h")
+        //            {
+        //                return input;
+        //            }
+        //            else if (input == "+")
+        //            {
+        //                input = Search("p");
+        //            }
+        //            else if (int.Parse(input) >= 1 && int.Parse(input) <= songsToPrint.Count)
+        //            {
+        //                MediaPlayer.GetInstance().Play(Utility.FindSong(songsToPrint[int.Parse(input) - 1].Title));
+        //                MediaPlayer.GetInstance().currentSong.SetStatus(Status.PLAYLIST);
+        //                return "playlistMenu";
+        //            }
+        //        }
+        //        catch (ArgumentOutOfRangeException)
+        //        {
+        //            continue;
+        //        }
+        //        catch
+        //        {
+        //            return input;
+        //        }
+        //    } while (true);
 
 
-        }
+
+
+        //}
         public static string Discography()
         {
             var albums = MediaPlayer.GetInstance().currentArtist.Albums;
@@ -821,7 +813,7 @@ namespace Utility.Read
             {
 
                 LocaleNavbar();
-                Console.WriteLine($"Discografia di {MediaPlayer.GetInstance().currentArtist.Name}:\n");
+                Console.WriteLine($"Discografia di {MediaPlayer.GetInstance().currentArtist.Title}:\n");
                 var songsToPrint = GetPage(albums, pageNumber, pagination);
                 for (int j = 0; j < songsToPrint.Count; j++)
                 {
@@ -955,10 +947,10 @@ namespace Utility.Read
                 input = Console.ReadLine().ToLower();
                 foreach (var artist in DataStore.dataStore.artists)
                 {
-                    if (artist.Name.ToLower() == input)
+                    if (artist.Title.ToLower() == input)
                     {
                         artists.Add(artist);
-                        Console.WriteLine(artist.Name);
+                        Console.WriteLine(artist.Title);
                     }
                 }
                 if (artists.Count != 0)
@@ -975,74 +967,74 @@ namespace Utility.Read
                 }
 
             }
-            else if (SearchType == "p")
-            {
-                int pageNumber = 0;
-                int pagination = 9;
-                Console.WriteLine("Che canzone vuoi aggiungere?\n");
-                SongPlayer();
-                input = Console.ReadLine().ToLower();
-                foreach (var song in DataStore.dataStore.songs)
-                {
-                    if (song.Title.ToLower() == input)
-                    {
-                        songs.Add(song);
-                    }
-                }
-                if (songs.Count != 0)
-                {
-                    do
-                    {
-                        LocaleNavbar();
-                        var songsToPrint = GetPage(songs, pageNumber, pagination);
-                        for (int j = 0; j < songsToPrint.Count; j++)
-                        {
-                            Console.WriteLine($"{j + 1}. {songsToPrint[j].Title}");
-                        }
-                        Console.WriteLine("0. Next page");
-                        Console.WriteLine("H. Torna alla homepage");
-                        SongPlayer();
-                        input = Console.ReadLine().ToLower();
-                        try
-                        {
-                            if (input == "0")
-                            {
-                                if (pageNumber >= songs.Count / pagination)
-                                {
-                                    pageNumber = 0;
-                                }
-                                else { pageNumber++; }
-                            }
-                            else if (input == "h")
-                            {
-                                return input;
-                            }
-                            else if (int.Parse(input) >= 1 && int.Parse(input) <= songsToPrint.Count)
-                            {
+            //else if (SearchType == "p")
+            //{
+            //    int pageNumber = 0;
+            //    int pagination = 9;
+            //    Console.WriteLine("Che canzone vuoi aggiungere?\n");
+            //    SongPlayer();
+            //    input = Console.ReadLine().ToLower();
+            //    foreach (var song in DataStore.dataStore.songs)
+            //    {
+            //        if (song.Title.ToLower() == input)
+            //        {
+            //            songs.Add(song);
+            //        }
+            //    }
+            //    if (songs.Count != 0)
+            //    {
+            //        do
+            //        {
+            //            LocaleNavbar();
+            //            var songsToPrint = GetPage(songs, pageNumber, pagination);
+            //            for (int j = 0; j < songsToPrint.Count; j++)
+            //            {
+            //                Console.WriteLine($"{j + 1}. {songsToPrint[j].Title}");
+            //            }
+            //            Console.WriteLine("0. Next page");
+            //            Console.WriteLine("H. Torna alla homepage");
+            //            SongPlayer();
+            //            input = Console.ReadLine().ToLower();
+            //            try
+            //            {
+            //                if (input == "0")
+            //                {
+            //                    if (pageNumber >= songs.Count / pagination)
+            //                    {
+            //                        pageNumber = 0;
+            //                    }
+            //                    else { pageNumber++; }
+            //                }
+            //                else if (input == "h")
+            //                {
+            //                    return input;
+            //                }
+            //                else if (int.Parse(input) >= 1 && int.Parse(input) <= songsToPrint.Count)
+            //                {
 
-                                MediaPlayer.GetInstance().currentPlaylist.AddSong(Utility.FindSong(songsToPrint[int.Parse(input) - 1].Title));
-                                return "playlistMenu";
-                            }
-                        }
-                        catch (ArgumentOutOfRangeException)
-                        {
-                            continue;
-                        }
-                        catch { return input; }
+            //                    MediaPlayer.GetInstance().currentPlaylist.AddSong(Utility.FindSong(songsToPrint[int.Parse(input) - 1].Title));
+            //                    return "playlistMenu";
+            //                }
+            //            }
+            //            catch (ArgumentOutOfRangeException)
+            //            {
+            //                continue;
+            //            }
+            //            catch { return input; }
 
-                    } while (true);
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\nCanzone non trovata");
-                    Console.ResetColor();
-                    Console.ReadLine();
-                    return "f";
-                }
+            //        } while (true);
+            //    }
+            //    else
+            //    {
+            //        Console.ForegroundColor = ConsoleColor.Red;
+            //        Console.WriteLine("\nCanzone non trovata");
+            //        Console.ResetColor();
+            //        Console.ReadLine();
+            //        return "f";
+            //    }
 
 
-            }
+            //}
             return input;
         }
         public static string AudioPage()
@@ -1104,12 +1096,12 @@ namespace Utility.Read
                 if (MediaPlayer.GetInstance().isPlaying)
                 {
                     Console.BackgroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine($"In riproduzione: {MediaPlayer.GetInstance().currentSong.Title} di {MediaPlayer.GetInstance().currentSong.ArtistName}");
+                    Console.WriteLine($"In riproduzione: {MediaPlayer.GetInstance().currentSong.Title} di {MediaPlayer.GetInstance().currentSong.Artist.Title}");
                 }
                 else
                 {
                     Console.BackgroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine($"In pausa: {MediaPlayer.GetInstance().currentSong.Title} di {MediaPlayer.GetInstance().currentSong.ArtistName}");
+                    Console.WriteLine($"In pausa: {MediaPlayer.GetInstance().currentSong.Title} di {MediaPlayer.GetInstance().currentSong.Artist.Title}");
                 }
             }
             Console.ResetColor();

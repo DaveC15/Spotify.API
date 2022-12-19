@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using DBSpotifyAPI.Models;
 
 namespace Utility.Read
 {
@@ -93,14 +94,14 @@ namespace Utility.Read
             }
             File.AppendAllLines(path, list);
         }
-        public static void GetSettings()
-        {
-            var services = new ServiceCollection();
-            IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            services.AddSingleton<Settings>();
-            OptionsConfigurationServiceCollectionExtensions.Configure<Settings>(services, config.GetSection("settings"));
-            config.GetRequiredSection("settings").Get<Settings>();
-        }
+        //public static void GetSettings()
+        //{
+        //    var services = new ServiceCollection();
+        //    IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        //    services.AddSingleton<Settings>();
+        //    OptionsConfigurationServiceCollectionExtensions.Configure<Settings>(services, config.GetSection("settings"));
+        //    config.GetRequiredSection("settings").Get<Settings>();
+        //}
         public static List<Artist> GetTopFiveArtists()
         {
             List<Artist> artistList = new List<Artist>();
@@ -109,7 +110,7 @@ namespace Utility.Read
             foreach (Artist artist in db.artists)
             {
                 int totalPopularity = 0;
-                foreach (var song in db.songs.Where(song => song.ArtistName.Equals(artist.Name)))
+                foreach (var song in db.songs.Where(song => song.Artist.Title.Equals(artist.Title)))
                 {
                     totalPopularity += song.Popularity;
                 }
@@ -117,7 +118,7 @@ namespace Utility.Read
             }
             foreach (var art in sortedArtists.OrderBy(x => x.Value).Reverse().Take(5))
             {
-                artistList.Add(db.artists.Where(i => i.Name == art.Key.Name).FirstOrDefault());
+                artistList.Add(db.artists.Where(i => i.Title == art.Key.Title).FirstOrDefault());
             }
             return artistList;
         }
@@ -157,7 +158,7 @@ namespace Utility.Read
         {
             foreach (var artist in DataStore.GetInstance().artists)
             {
-                if (artist.Name.Equals(input))
+                if (artist.Title.Equals(input))
                 {
                     return artist;
                 }
@@ -179,7 +180,7 @@ namespace Utility.Read
         {
             foreach (var radio in DataStore.GetInstance().radios)
             {
-                if (radio.Name.Equals(input))
+                if (radio.Title.Equals(input))
                 {
                     return radio;
                 }
@@ -190,7 +191,7 @@ namespace Utility.Read
         {
             foreach (var playlist in DataStore.GetInstance().playlists)
             {
-                if (playlist.Name.Equals(input))
+                if (playlist.Title.Equals(input))
                 {
                     return playlist;
                 }

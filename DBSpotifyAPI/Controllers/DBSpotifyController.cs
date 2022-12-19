@@ -117,6 +117,20 @@ namespace DBSpotifyAPI.Controllers
             }
         }
 
+        [HttpGet("GetAccount")]
+
+        public async Task<IActionResult> GetAccount()
+        {
+            try
+            {
+                var account = await _context.Accounts.ToListAsync();
+                return Ok(account);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
