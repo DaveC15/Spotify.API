@@ -45,9 +45,9 @@ namespace Utility.Read
             
             if(currentRadio == null)
             {
-                currentRadio = DataStore.GetInstance().radios.Where(x => x.Genre == currentSong.Genre).FirstOrDefault();
+                currentRadio = DataStore.GetInstance().radios.Where(x => x.Genre.Title == currentSong.Genre.Title).FirstOrDefault();
             }
-            List<Song> songs = DataStore.GetInstance().songs.Where(x=>x.GenreId == currentRadio.GenreId).ToList();
+            List<Song> songs = DataStore.GetInstance().songs.Where(x=>x.Genre.Title == currentRadio.Genre.Title).ToList();
             var index = random.Next(0, songs.Count);
             while (songs[index] == currentSong)
             {

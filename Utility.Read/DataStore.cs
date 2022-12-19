@@ -80,9 +80,9 @@ namespace Utility.Read
             GetAllArtists().GetAwaiter().GetResult();
             GetAllSongs().GetAwaiter().GetResult();
             GetAllGenre().GetAwaiter().GetResult();
-            //GetAccount().GetAwaiter().GetResult();
             GetAllPlaylists().GetAwaiter().GetResult();
             GetAllRadios().GetAwaiter().GetResult();
+            //GetAccount().GetAwaiter().GetResult();
 
 
             SetSongProperties();
@@ -92,7 +92,7 @@ namespace Utility.Read
             SetArtistSongs();
             //SetPlaylistAccount();
             //SetAccountPlaylists();
-            //SetRadiosGenre();
+            SetRadiosGenre();
         }
         #region GetFromDB
         async Task GetAllSongs()

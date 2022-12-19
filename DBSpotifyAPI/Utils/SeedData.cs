@@ -128,6 +128,10 @@ namespace DBSpotifyAPI.Utils
             {
                 albums[i].Songs.AddRange(GetPage<Song>(songs,i,6));
             }
+            for (int i = 0; i < radios.Count; i++)
+            {
+                radios[i].Genre = genres[i];
+            }
 
             var temp = new List<Song>();
             for (int i = 0; i < genres.Count; i++)
