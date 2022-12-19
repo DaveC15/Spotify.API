@@ -5,6 +5,18 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Read", "Utility.Read\Utility.Read.csproj", "{9E38C4E3-CB41-4863-B093-911F8A30C56E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBSpotifyAPI", "DBSpotifyAPI\DBSpotifyAPI.csproj", "{089D1D5F-8E75-48C3-B4B0-2BDF3EFE1C2A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{33843B23-8251-4F4E-9D4C-AFE261279A78}"
+	ProjectSection(SolutionItems) = preProject
+		Database\Dockerfile = Database\Dockerfile
+		Database\entrypoint.sh = Database\entrypoint.sh
+		Database\SqlCmdScript.sql = Database\SqlCmdScript.sql
+		Database\SqlCmdStartup.sh = Database\SqlCmdStartup.sh
+	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AAF8F084-5238-4E0B-A85C-81127EDFF3CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +27,14 @@ Global
 		{9E38C4E3-CB41-4863-B093-911F8A30C56E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E38C4E3-CB41-4863-B093-911F8A30C56E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E38C4E3-CB41-4863-B093-911F8A30C56E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{089D1D5F-8E75-48C3-B4B0-2BDF3EFE1C2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{089D1D5F-8E75-48C3-B4B0-2BDF3EFE1C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{089D1D5F-8E75-48C3-B4B0-2BDF3EFE1C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{089D1D5F-8E75-48C3-B4B0-2BDF3EFE1C2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAF8F084-5238-4E0B-A85C-81127EDFF3CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAF8F084-5238-4E0B-A85C-81127EDFF3CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAF8F084-5238-4E0B-A85C-81127EDFF3CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAF8F084-5238-4E0B-A85C-81127EDFF3CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

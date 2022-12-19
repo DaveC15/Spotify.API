@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  dbspotifyapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5344:80"
